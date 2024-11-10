@@ -19,8 +19,6 @@ const addMsgToChatBox = (messageToAdd) => {
     chatBox.scrollTop = chatBox.scrollHeight;  // Auto-scroll to the bottom
 }
 
-
-
 socket.on("message", function(data) {
     addMsgToChatBox(data)
 })
@@ -35,7 +33,6 @@ socket.on("disconnection_msg", function(data) {
 })
 
 socket.on("connect", function() {
-   
     socket.emit("connected", {
         "userName": userName,
     })
@@ -47,28 +44,33 @@ socket.on("disconnect", function() {
     })
 })
 
+socket.on("incoming_msg", function(data) {
+    addMsgToChatBox(data)
+})
+
 
 // Function to send message
 function sendMessage() {
     console.log("Send msg function");
 }
 
-
-// // Function to send message
-// function sendMessage() {
-//     const message = document.getElementById('message').value;
-//     if (message) {
-//         data = {
-//             "type": "incoming_msg",
-//             "userName": userName,
-//             "message": message
-//         }
-//         console.log("sending socket data")
-//         socket.emit('send_msg', data)
-//         // Send the message to the server
-//         document.getElementById('message').value = '';  // Clear the input
-//     }
-// }
+function sendMessage() {
+    const message = document.getElementById('message').value;
+    if (message) {
+        data = {
+            "userName": userName,
+            "userId": socket.id,
+            "message": message,
+            "messageType": "incomign_msg",
+        }
+        console.log("sending socket data")
+        socket.emit('send_msg', data)
+        self_msg = "You: " + message;
+        addMsgToChatBox(self_msg);
+        // Send the message to the server
+        document.getElementById('message').value = '';  // Clear the input
+    }
+}
 
 
 

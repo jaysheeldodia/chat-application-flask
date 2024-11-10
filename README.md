@@ -15,16 +15,29 @@ Common argument name on server side and client side: data
     - Disconnect message to all
     - Broadcast message to all that this person has disconnected except for the sender
     
-* [ ] On message send
+* [x] On message send
+    1. JS Side Send - function send_msg
+    2. Server side receive
+    3. Server side Broadcast (Self Include = False)
+    4. JS Side receive - function incoming_msg
     - Emit message to server 
         -> userName
-        -> userId
+        -> userId (socketid)
         -> message
         -> messageType
     - Server emit message to the client
         -> Send the userName
         -> send the message
-        
-* [ ] On message receive
-    - Print the message in the format:
-        -> userName: message
+
+* [ ] Better user name input
+    - UI for the same
+
+* [ ] Rooms
+
+* [ ] Rooms with passwords
+
+* [ ] Channels for admins
+
+* [ ] Work on the UI
+
+* [ ] Deobfuscate
