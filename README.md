@@ -29,6 +29,11 @@ Common argument name on server side and client side: data
         -> Send the userName
         -> send the message
 
+* [ ] Temporary dictionary database
+    - use the socket id, name, password and other things to store into the dictionary for now
+    
+* [ ] Implement the login
+
 * [ ] Better user name input
     - UI for the same
 
@@ -41,3 +46,5 @@ Common argument name on server side and client side: data
 * [ ] Work on the UI
 
 * [ ] Deobfuscate
+
+* [ ] Next word prediction

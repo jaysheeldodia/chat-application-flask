@@ -1,14 +1,9 @@
 const socket = io();
-const userName = window.prompt("Enter your name ");
-socket.send(({
-    "data": userName,   
-    "type": "connection"
-}))
 
 const inputElement = document.getElementById("message");
 
-
 let userId = null;
+let userName = null;
 
 // add message to the chatbox
 const addMsgToChatBox = (messageToAdd) => {
@@ -19,24 +14,11 @@ const addMsgToChatBox = (messageToAdd) => {
     chatBox.scrollTop = chatBox.scrollHeight;  // Auto-scroll to the bottom
 }
 
-socket.on("message", function(data) {
-    addMsgToChatBox(data)
-})
-
-socket.on("connection_msg", function(data) {
-    addMsgToChatBox(data);
-})
-
-socket.on("disconnection_msg", function(data) {
-    console.log("This message is called")
-    addMsgToChatBox(data);
-})
-
-socket.on("connect", function() {
-    socket.emit("connected", {
-        "userName": userName,
-    })
-})
+// socket.on("connect", function() {
+//     socket.emit("connected", {
+//         "userName": userName,
+//     })
+// })
 
 socket.on("disconnect", function() {
     socket.emit("disconnected", {
@@ -44,26 +26,50 @@ socket.on("disconnect", function() {
     })
 })
 
+socket.on("message", function(data) {
+    addMsgToChatBox(data)
+})
+
 socket.on("incoming_msg", function(data) {
     addMsgToChatBox(data)
 })
 
+socket.on("self_connection_data", function(data) {
+    userName = data['userName']
+    console.log(userName);
+})
+
+socket.on("connection_msg", function(data) {
+    addMsgToChatBox(data['message']);
+})
+
+socket.on("disconnection_msg", function(data) {
+    console.log("This message is called")
+    addMsgToChatBox(data);
+})
 
 // Function to send message
 function sendMessage() {
     console.log("Send msg function");
 }
 
+document.getElementById('message').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        sendMessage();
+    }
+});
+
 function sendMessage() {
     const message = document.getElementById('message').value;
     if (message) {
-        data = {
+        let data = {
             "userName": userName,
             "userId": socket.id,
             "message": message,
-            "messageType": "incomign_msg",
+            "messageType": "incoming_msg",
         }
         console.log("sending socket data")
+        console.log(data)
         socket.emit('send_msg', data)
         self_msg = "You: " + message;
         addMsgToChatBox(self_msg);
@@ -72,13 +78,11 @@ function sendMessage() {
     }
 }
 
-
-
 // Event listener for incoming messages
-socket.on('incoming_message', function (msg) {
-    const chatBox = document.getElementById('chat-box');
-    const p = document.createElement('p');
-    p.innerText = msg["data"];
-    chatBox.appendChild(p);
-    chatBox.scrollTop = chatBox.scrollHeight;  // Auto-scroll to the bottom
-});
+// socket.on('incoming_message', function (msg) {
+//     const chatBox = document.getElementById('chat-box');
+//     const p = document.createElement('p');
+//     p.innerText = msg["data"];
+//     chatBox.appendChild(p);
+//     chatBox.scrollTop = chatBox.scrollHeight;  // Auto-scroll to the bottom
+// });
